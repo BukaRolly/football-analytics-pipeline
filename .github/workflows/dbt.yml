@@ -1,0 +1,43 @@
+name: dbt BigQuery
+
+on:
+  workflow_dispatch:        # Manual trigger
+  push:
+    branches: [ main ]     # Trigger on push to main
+  schedule:                # Daily scheduled trigger
+    - cron: "35 0 * * *"  # 00:35 UTC daily (~1:35 AM Amsterdam)
+
+jobs:
+  dbt-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout the repo
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # 2️⃣ Set up Python
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # 3️⃣ Install dbt for BigQuery
+      - name: Install dbt
+        run: pip install dbt-bigquery
+
+      # 4️⃣ Write GCP credentials to a file at runtime
+      - name: Write GCP credentials
+        run: |
+          echo "${{ secrets.GCP_BASE }}" > $HOME/gcp-key.json
+
+      # 5️⃣ Set environment variable for Google credentials
+      - name: Set GOOGLE_APPLICATION_CREDENTIALS
+        run: |
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcp-key.json" >> $GITHUB_ENV
+
+      # 6️⃣ Run dbt inside your dbt folder
+      - name: Run dbt models
+        run: |
+          cd dbt
+          dbt run

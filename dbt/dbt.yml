@@ -1,0 +1,18 @@
+# dbt/dbt_project.yml
+name: 'football_analytics'
+version: '1.0'
+config-version: 2
+
+profile: 'football_analytics'  # matches the profile name in profiles.yml
+target-path: "target"          # compiled SQL goes here
+clean-targets:
+  - "target"
+  - "dbt_modules"
+
+model-paths: ["models"]        # where your SQL models live
+analysis-paths: ["analysis"]
+macro-paths: ["macros"]
+
+models:
+  football_analytics:
+    +materialized: table      # dbt will create tables in BigQuery
