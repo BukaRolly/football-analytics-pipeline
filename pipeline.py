@@ -15,7 +15,6 @@ df_clean = clean_dataframe(df)
 load_to_bigquery(df_clean, SERVICE_ACCOUNT_PATH, dataset_name="FootballTest", table_name="PL25_26_Raw")
 
 # Trigger dbt transformations
-run_dbt()
 
 # Optional: add timestamp
 df_clean["ingested_at"] = pd.Timestamp.utcnow()
