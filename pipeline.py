@@ -3,8 +3,9 @@ from fetch_data import fetch_matches_api
 from clean_transform import format_api_pull_to_dataframe, clean_dataframe
 from load_bigquery import load_to_bigquery
 from create_table import run_dbt
+import os
 
-SERVICE_ACCOUNT_PATH = r"C:\Users\bulcs\Downloads\project-035fdd4a-27dd-4323-a4e-61f1b2965cb1.json"
+SERVICE_ACCOUNT_PATH = os.environ["GCP_BASE_PATH"]
 
 # Fetch
 data = fetch_matches_api()
