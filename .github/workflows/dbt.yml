@@ -1,4 +1,4 @@
-name: Daily DBT Run
+name: Daily Football Pipeline
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch: # allows manual trigger
 
 jobs:
-  dbt-run:
+  run-python-pipeline:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,13 +22,13 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install dbt-bigquery pandas google-cloud-bigquery python-dotenv pyarrow
+        pip install pandas requests python-dotenv google-cloud-bigquery pyarrow
 
     - name: Write GCP service account key
       run: echo "${{ secrets.GCP_BASE }}" > $HOME/gcp_key.json
 
-    - name: Run dbt
-      working-directory: ./dbt
-      run: dbt run --profiles-dir ./dbt
+    - name: Run Python pipeline
+      run: python pipeline.py
       env:
+        FOOTBALL_API_TOKEN: ${{ secrets.FOOTBALL_API_TOKEN }}
         GCP_BASE_PATH: $HOME/gcp_key.json
