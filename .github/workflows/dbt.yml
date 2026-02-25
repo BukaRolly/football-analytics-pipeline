@@ -1,10 +1,10 @@
-name: Daily Football Analytics Pipeline
+name: Daily Football Analytics Pipeline test
 
 on:
   schedule:
     # Every day at 1:35 AM Amsterdam time (CET/CEST)
     - cron: '35 0 * * *'
-  workflow_dispatch: # allows manual trigger
+  workflow_dispatch:
 
 jobs:
   run-pipeline:
@@ -22,22 +22,13 @@ jobs:
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pandas requests python-dotenv google-cloud-bigquery pyarrow
-
-    - name: Install dbt for BigQuery
-      run: pip install dbt-bigquery
+        pip install pandas requests python-dotenv google-cloud-bigquery pyarrow dbt-bigquery
 
     - name: Write GCP service account key
       run: echo "${{ secrets.GCP_BASE }}" > $HOME/gcp_key.json
 
-    - name: Run Python pipeline
+    - name: Run Python pipeline (fetch → transform → load → dbt)
       run: python pipeline.py
       env:
         FOOTBALL_API_TOKEN: ${{ secrets.FOOTBALL_API_TOKEN }}
-        GCP_BASE_PATH: $HOME/gcp_key.json
-
-    - name: Run dbt models
-      working-directory: ./dbt
-      run: dbt run --profiles-dir ./dbt
-      env:
         GCP_BASE_PATH: $HOME/gcp_key.json
