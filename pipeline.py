@@ -5,8 +5,7 @@ from load_bigquery import load_to_bigquery
 from create_table import run_dbt
 import os
 
-SERVICE_ACCOUNT_PATH = os.environ["GCP_BASE_PATH"]
-
+SERVICE_ACCOUNT_PATH = os.path.expandvars(os.environ["GCP_BASE_PATH"])
 # Fetch
 data = fetch_matches_api()
 

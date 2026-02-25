@@ -1,4 +1,4 @@
-name: Daily Football Analytics Pipeline test
+name: Daily Football Analytics Pipeline test2
 
 on:
   schedule:
