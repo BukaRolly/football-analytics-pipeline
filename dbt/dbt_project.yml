@@ -1,0 +1,4 @@
+name: football_dbt
+version: 1.0
+profile: my_project   # must match the profile name in profiles.yml
+model-paths: ["models"]
