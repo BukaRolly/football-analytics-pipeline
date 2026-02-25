@@ -1,0 +1,11 @@
+my_project:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: project-035fdd4a-27dd-4323-a4e
+      dataset: FootballTest
+      keyfile: "{{ env_var('GCP_BASE_PATH') }}"
+      threads: 1
+      timeout_seconds: 300
